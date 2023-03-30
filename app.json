@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "objoin-mobile-app",
+    "slug": "objoin-mobile-app",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "objoin-mobile-app"
+}
