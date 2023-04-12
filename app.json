@@ -1,11 +1,14 @@
 {
   "expo": {
-    "name": "objoin-mobile-app",
-    "slug": "objoin-mobile-app",
+    "name": "OBJOIN",
+    "slug": "OBJOIN",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "android": {
+      "softwareKeyboardLayoutMode": "pan"
+    }
   },
-  "name": "objoin-mobile-app"
+  "name": "OBJOIN"
 }
