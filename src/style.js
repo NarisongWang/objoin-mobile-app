@@ -26,6 +26,13 @@ const basicStyle =  StyleSheet.create({
         height:55,
         width:200
     },
+    buttonGrey:{
+        backgroundColor:'lightgrey',
+        borderRadius:15,
+        margin:30,
+        height:55,
+        width:200
+    },
     buttonTitle:{
         fontSize:23,
         fontFamily:'Poppins-Medium'
@@ -148,7 +155,7 @@ const listStyle = StyleSheet.create({
 const detailStyle = StyleSheet.create({
     container:{
         flex: 1, 
-        width: '90%',
+        width: '100%',
         justifyContent: 'flex-start', 
         backgroundColor:'white',
     },
@@ -172,6 +179,15 @@ const detailStyle = StyleSheet.create({
     },
     photoContainer:{
         marginTop: 20
+    },
+    checklist: {
+        fontWeight:"bold",
+        fontStyle:"italic",
+        fontSize: 20,
+        color:'blue',
+        marginTop:10,
+        marginLeft:20,
+        marginBottom:10
     }
 })
 
@@ -211,6 +227,53 @@ const cameraStyles = StyleSheet.create({
         margin:10,
         width:300,
     },
- })
+})
 
-export { basicStyle, listStyle, detailStyle, cameraStyles }
+const checkListStyle = StyleSheet.create({
+    rowBetween:{
+        width:"100%",
+        flexDirection:"row",
+        justifyContent:"space-between"
+    },
+    rowCenter:{
+        width:"100%",
+        flexDirection:"row",
+        justifyContent:"center",
+        marginBottom:10,
+        borderBottomWidth:1
+    },
+    image:{
+        marginTop:20,
+        marginLeft:20,
+        width: 300,
+        height: 130,
+        marginBottom:10
+    },
+    image2:{
+        marginTop:20,
+        marginLeft:20,
+        width: 130,
+        height: 40,
+    },
+    infoRight:{
+        alignItems:"flex-end",
+        marginTop:20,
+        marginRight:20,
+    },
+    infoLeft:{
+        alignItems:"flex-start",
+        marginTop:20,
+        marginLeft:20,
+        justifyContent:"center",
+        marginBottom:10
+    },
+    text1:{
+        fontSize:15
+    },
+    text2:{
+        fontSize:18,
+        fontWeight:"bold"
+    },
+})
+
+export { basicStyle, listStyle, detailStyle, cameraStyles, checkListStyle }

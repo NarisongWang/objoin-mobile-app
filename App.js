@@ -8,11 +8,12 @@ import ResetPassword from './src/screens/ResetPassword'
 import InstallationOrderList from './src/screens/InstallationOrderList'
 import InstallationOrderDetail from './src/screens/InstallationOrderDetail'
 import CameraScreen from './src/screens/Camera'
-//import KeyboardAvoidingComponent from './src/screens/KeyboardTest'
+import PdfScreen from './src/screens/PdfScreen'
 import { useSelector, useDispatch } from 'react-redux'
 import { checkAuth } from './src/features/auth/authSlice'
 import { OverflowMenuProvider } from 'react-navigation-header-buttons'
 import Spinner from './src/components/Spinner'
+import CheckList from './src/screens/CheckList'
 
 const AuthStack = createNativeStackNavigator()
 const OrderStack = createNativeStackNavigator()
@@ -69,6 +70,24 @@ const AppOrderStack = () => {
           component={CameraScreen}
           options={{
             title: 'OBJOIN - Camera',
+            headerTitleStyle: {
+              fontFamily: 'Poppins-SemiBold',
+            },
+          }} />
+        <OrderStack.Screen 
+          name="Pdf" 
+          component={PdfScreen}
+          options={{
+            title: 'PDF file - ',
+            headerTitleStyle: {
+              fontFamily: 'Poppins-SemiBold',
+            },
+          }} />
+        <OrderStack.Screen 
+          name="CheckList" 
+          component={CheckList}
+          options={{
+            title: 'Install Check List - ',
             headerTitleStyle: {
               fontFamily: 'Poppins-SemiBold',
             },

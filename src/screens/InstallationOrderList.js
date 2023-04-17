@@ -3,7 +3,7 @@ import { SafeAreaView, ScrollView, View, TouchableOpacity } from 'react-native'
 import { Button } from '@rneui/themed'
 import MenuButtons from '../components/MenuButtons'
 import { useDispatch, useSelector } from 'react-redux'
-import { getInstallationOrders } from '../features/installationOrder/installationOrderSlice'
+import { getInstallationOrders, deleteClosedOrders } from '../features/installationOrder/installationOrderSlice'
 import { MyAppTextBold } from '../components/MyAppText'
 import InstallationOrderItem from '../components/InstallationOrderItem'
 import Spinner from '../components/Spinner'
@@ -22,12 +22,14 @@ const InstallationOrderList = ({ navigation }) => {
             )
         })
         dispatch(getInstallationOrders())
+        .unwrap().then(()=>{
+            dispatch(deleteClosedOrders())
+        }).catch()
     },[])
 
     useEffect(()=>{
         if(error!==''){
-            console.log(error)
-            alert('There is an error, please contact system admin!')
+            alert(error.message)
         }
     },[error])
 
@@ -48,9 +50,9 @@ const InstallationOrderList = ({ navigation }) => {
     const startInstallationOrder = () =>{
         if(!select){
             alert('Please select an installation order first.')
+            return
         }
-        navigation.navigate('Detail', { installationOrder: select })
-        
+        navigation.navigate('Detail', { installationOrderId: select._id })
         setSelect(null)
     }
 
@@ -65,7 +67,9 @@ const InstallationOrderList = ({ navigation }) => {
 
     return (
         <SafeAreaView style={basicStyle.container}>
-            <ScrollView>
+            {installationOrders.length===0?
+            (<MyAppTextBold style={{flex:1, color:'blue', fontSize:25, marginTop:50}}>No available installation order found.</MyAppTextBold>):(
+                <ScrollView>
                 <ScrollView horizontal>
                     <View>
                         <View style={listStyle.heading}>
@@ -87,18 +91,20 @@ const InstallationOrderList = ({ navigation }) => {
                     </View>
                 </ScrollView>
             </ScrollView>
+            )}
+            
             <View style={basicStyle.buttonContainer}>
-                <Button 
-                    buttonStyle={basicStyle.button}
-                    titleStyle={basicStyle.buttonTitle} 
-                    title="Start"
-                    onPress={() => startInstallationOrder()}>
-                </Button>
                 <Button 
                     buttonStyle={basicStyle.button}
                     titleStyle={basicStyle.buttonTitle} 
                     title="Refresh"
                     onPress={() => refresh()}>
+                </Button>
+                <Button 
+                    buttonStyle={basicStyle.button}
+                    titleStyle={basicStyle.buttonTitle} 
+                    title="Start"
+                    onPress={() => startInstallationOrder()}>
                 </Button>
             </View>
         </SafeAreaView>

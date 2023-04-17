@@ -17,8 +17,8 @@ const MenuButtons = () => {
       <OverflowMenu 
         style={{ margin:10 }}
         OverflowIcon={<AntDesign name="downcircle" size={24} color="black" />} >
-          <HiddenItem title="Set Signature" style={{ width:400, borderBottomColor:'grey', borderBottomWidth:1 }} titleStyle={{fontSize:20,fontFamily:'Poppins-Medium'}} onPress={() => {}} />
-          <HiddenItem title="Logout" style={{ width:400 }} titleStyle={{fontSize:20,fontFamily:'Poppins-Medium'}} onPress={() => {dispatch(logout())}} />
+          {/* <HiddenItem title="Set Signature" style={{ width:400, borderBottomColor:'grey', borderBottomWidth:1 }} titleStyle={{fontSize:20,fontFamily:'Poppins-Medium'}} onPress={() => {}} /> */}
+          <HiddenItem title="Logout" style={{ width:150, alignItems:'center'}} titleStyle={{fontSize:20,fontFamily:'Poppins-Medium'}} onPress={() => {dispatch(logout())}} />
       </OverflowMenu>
     </HeaderButtons>
   )

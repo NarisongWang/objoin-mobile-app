@@ -4,13 +4,28 @@ import { retrieveUserToken, getConfig } from "../../utils/utils"
 import * as FileSystem from 'expo-file-system'
 import * as ImageManipulator from 'expo-image-manipulator'
 
-const API_URL_LIST = API_URL+'/installationorders/'
-const API_URL_UPLOAD = API_URL+'/uploadPhotos'
+const API_URL_LIST = API_URL +'/installationorders/'
+const API_URL_UPLOAD = API_URL +'/uploadPhotos'
+const API_URL_DOWNLOAD = API_URL +'/download'
 
 const getInstallationOrders = async() =>{
     const token = await retrieveUserToken()
     const config = getConfig(token)
     const response = await axios.get(API_URL_LIST, config)
+    return response.data
+}
+
+const getInstallationOrder = async(installationOrderId) =>{
+    const token = await retrieveUserToken()
+    const config = getConfig(token)
+    const response = await axios.get(API_URL_LIST+installationOrderId, config)
+    return response.data
+}
+
+const updateInstallationOrder = async(update)=>{
+    const token = await retrieveUserToken()
+    const config = getConfig(token)
+    const response = await axios.put(API_URL_LIST+update.installationOrderId, update.update, config)
     return response.data
 }
 
@@ -48,7 +63,6 @@ const submitOrder = async(orderInfo) =>{
             throw new Error('Photo upload failed, please try again later!')
         }
     }
-    console.log(orderInfo)
     //step2: update installation order
     try {
         await axios.put(API_URL_LIST+orderInfo.installationOrderId, orderInfo.update, config)
@@ -61,9 +75,61 @@ const submitOrder = async(orderInfo) =>{
     return response.data
 }
 
+const openPdf = async ( pdfInfo ) =>{
+    const token = await retrieveUserToken()
+    const config = getConfig(token)
+
+    const { filePath, fileName } = pdfInfo
+    //find document from local storage
+    const fileUri = FileSystem.documentDirectory + filePath + fileName
+    const fileExists = (await FileSystem.getInfoAsync(fileUri)).exists
+    //if document exists then open it
+    //if document doesn't exist, download file from the server and open it
+    if (fileExists) {
+        return fileUri
+    } else {
+        //check directory
+        const dirUri = FileSystem.documentDirectory + filePath
+        const dirExists = (await FileSystem.getInfoAsync(dirUri)).isDirectory
+        if (!dirExists) {
+            await FileSystem.makeDirectoryAsync(dirUri, { intermediates: true })
+        }
+        // download pdf file
+        const response = await axios.post(API_URL_DOWNLOAD, {path:filePath + fileName}, config)
+        await FileSystem.writeAsStringAsync(fileUri, response.data, { encoding: FileSystem.EncodingType.Base64 })
+        return fileUri
+    }
+}
+
+const deleteClosedOrders = async(installationOrders) =>{
+    const root = FileSystem.documentDirectory
+    FileSystem.readDirectoryAsync(root)
+    .then(orders=>{
+        orders.forEach(order=>{
+            if(!isCurrentFolderInOrderList(order, installationOrders)){
+                FileSystem.deleteAsync(root+order)
+            }
+        })
+    })
+}
+
+const isCurrentFolderInOrderList = (order,installationOrders)=>{
+    for (let i = 0; i < installationOrders.length; i++) {
+        const installationOrder = installationOrders[i];
+        if(order == installationOrder.installationOrderNumber){
+            return true
+        }
+    }
+    return false
+}
+
 const installationOrderAPI = {
     getInstallationOrders,
-    submitOrder
+    getInstallationOrder,
+    updateInstallationOrder,
+    submitOrder,
+    openPdf,
+    deleteClosedOrders
 }
 
 export default installationOrderAPI

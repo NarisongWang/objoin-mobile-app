@@ -15,7 +15,15 @@ const MyAppTextBold = ( props ) => {
         {props.children}
       </Text>
     )
-  }
+}
+
+const MyAppTextItalic = ( props ) => {
+  return (
+    <Text style={[styles.fontItalic, props.style]}>
+      {props.children}
+    </Text>
+  )
+}
 
 const styles = StyleSheet.create({
     font :{
@@ -23,6 +31,9 @@ const styles = StyleSheet.create({
     },
     fontBold :{
         fontFamily:'Poppins-Bold'
-    }
+    },
+    fontItalic :{
+      fontFamily:'Poppins-Italic'
+  }
 })
-export { MyAppText, MyAppTextBold }
+export { MyAppText, MyAppTextBold, MyAppTextItalic }
