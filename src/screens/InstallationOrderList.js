@@ -3,7 +3,7 @@ import { SafeAreaView, ScrollView, View, TouchableOpacity } from 'react-native'
 import { Button } from '@rneui/themed'
 import MenuButtons from '../components/MenuButtons'
 import { useDispatch, useSelector } from 'react-redux'
-import { getInstallationOrders, deleteClosedOrders } from '../features/installationOrder/installationOrderSlice'
+import { getInstallationOrders, deleteClosedOrders, updateInstallationOrder, resetError } from '../features/installationOrder/installationOrderSlice'
 import { MyAppTextBold } from '../components/MyAppText'
 import InstallationOrderItem from '../components/InstallationOrderItem'
 import Spinner from '../components/Spinner'
@@ -29,7 +29,8 @@ const InstallationOrderList = ({ navigation }) => {
 
     useEffect(()=>{
         if(error!==''){
-            alert(error.message)
+            alert(error)
+            dispatch(resetError())
         }
     },[error])
 
@@ -52,13 +53,29 @@ const InstallationOrderList = ({ navigation }) => {
             alert('Please select an installation order first.')
             return
         }
-        navigation.navigate('Detail', { installationOrderId: select._id })
+        if(user.userType === dictionary.userType[0].typeId){
+            navigation.navigate('Detail', { installationOrderId: select._id })
+        }else if(user.userType === dictionary.userType[1].typeId){
+            const update = {
+                installationOrderId:select._id, 
+                update:{
+                    workStatus:dictionary.workStatus[3].statusId, 
+                    timeFrames:[...select.timeFrames,{workStatus:dictionary.workStatus[3].statusId,time:new Date()}]}}
+            dispatch(updateInstallationOrder(update))
+            .unwrap().then(()=>{
+                navigation.navigate('Detail', { installationOrderId: select._id })
+            }).catch()
+        }
+        
         setSelect(null)
     }
 
     const refresh = () =>{
         setSelect(null)
         dispatch(getInstallationOrders())
+        .unwrap().then(()=>{
+            dispatch(deleteClosedOrders())
+        }).catch()
     }
 
     if(isLoading){

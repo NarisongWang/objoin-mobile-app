@@ -52,16 +52,16 @@ const CameraScreen = ({ navigation, route }) => {
             const dirUri = `${FileSystem.documentDirectory}${installationOrderNumber}/photos${userType}`
             if (!(await FileSystem.getInfoAsync(dirUri)).isDirectory) {
                 await FileSystem.makeDirectoryAsync(dirUri, { intermediates: true })
-            }
+            } 
             //check duplicated photo name
-            if((await FileSystem.getInfoAsync(dirUri+'/'+photoName+'.jpg')).exists){
+            if((await FileSystem.getInfoAsync(dirUri+'/'+photoName.trim()+'.jpg')).exists){
                 alert('The photo name already exists, please change another name!')
                 return
             }
 
             try {
-                await FileSystem.writeAsStringAsync(`${dirUri}/${photoName}.jpg`, photo.base64, { encoding: FileSystem.EncodingType.Base64 })
-                alert(`${photoName}.jpg has been successfully saved!`)
+                await FileSystem.writeAsStringAsync(`${dirUri}/${photoName.trim()}.jpg`, photo.base64, { encoding: FileSystem.EncodingType.Base64 })
+                alert(`${photoName.trim()}.jpg has been successfully saved!`)
             } catch (error) {
                 alert("Error: "+error)
             }

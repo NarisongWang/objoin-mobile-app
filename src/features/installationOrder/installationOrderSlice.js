@@ -93,8 +93,7 @@ export const installationOrderSlice = createSlice({
     name:'installationOrder',
     initialState,
     reducers: {
-        setLoading:(state) => {state.isLoading = true},
-        resetLoading:(state) => {state.isLoading = false}
+        resetError:(state) => {state.error = ''}
     },
     extraReducers:(builder) =>{
         builder
@@ -166,5 +165,5 @@ export const installationOrderSlice = createSlice({
     }
 })
 
-export const { setLoading, resetLoading } = installationOrderSlice.actions
+export const { resetError } = installationOrderSlice.actions
 export default installationOrderSlice.reducer

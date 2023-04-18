@@ -25,6 +25,10 @@ const Login = ({ navigation }) => {
             alert('This is not a valid email address!')
             return
         }
+        if(password===''){
+            alert('Please enter password!')
+            return
+        }
         const userData = {
             email,
             password

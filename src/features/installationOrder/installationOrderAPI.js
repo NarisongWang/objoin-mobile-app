@@ -8,6 +8,9 @@ const API_URL_LIST = API_URL +'/installationorders/'
 const API_URL_UPLOAD = API_URL +'/uploadPhotos'
 const API_URL_DOWNLOAD = API_URL +'/download'
 
+axios.defaults.timeout = 10000
+axios.defaults.timeoutErrorMessage='Requset time out, please check your internet connection and try again later!'
+
 const getInstallationOrders = async() =>{
     const token = await retrieveUserToken()
     const config = getConfig(token)
@@ -60,14 +63,14 @@ const submitOrder = async(orderInfo) =>{
         try {
             await axios.post(API_URL_UPLOAD, formData, config2)
         } catch (error) {
-            throw new Error('Photo upload failed, please try again later!')
+            throw new Error('Photo upload failed: ' + error)
         }
     }
     //step2: update installation order
     try {
         await axios.put(API_URL_LIST+orderInfo.installationOrderId, orderInfo.update, config)
     } catch (error) {
-        throw new Error('Update installation order failed, please try again later!')
+        throw new Error('Update installation order failed: ' + error)
     }
 
     //step3: return updated installation order list

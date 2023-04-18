@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useIsFocused } from '@react-navigation/native'
 import { ScrollView, View, Alert, Text, TextInput, TouchableOpacity, Image, Dimensions } from 'react-native'
 import { Button, Input } from '@rneui/themed'
-import { getInstallationOrder, submitOrder } from '../features/installationOrder/installationOrderSlice'
+import { getInstallationOrder, submitOrder, resetError } from '../features/installationOrder/installationOrderSlice'
 import MenuButtons from '../components/MenuButtons'
 import Photo from '../components/Photo'
 import { BackHandler } from 'react-native'
@@ -39,6 +39,7 @@ const InstallationOrderDetail = ({ navigation, route }) => {
 
     useEffect(()=>{
         dispatch(getInstallationOrder(installationOrderId))
+        loadPhotos()
 
         navigation.setOptions({
             title: `Order Details`,
@@ -69,6 +70,16 @@ const InstallationOrderDetail = ({ navigation, route }) => {
       
           return () => backHandler.remove()
     },[])
+
+    useEffect(()=>{
+        if(error!==''){
+            alert(error)
+            if (!installationOrder.installationOrderNumber) {
+                navigation.goBack()
+            }
+            dispatch(resetError())
+        }
+    },[error])
 
     const loadPhotos = () =>{
         const dirUri = `${FileSystem.documentDirectory}${installationOrder.installationOrderNumber}/photos${user.userType}`
@@ -128,6 +139,14 @@ const InstallationOrderDetail = ({ navigation, route }) => {
     }
 
     const submitInstallationOrder = () =>{
+        if(photos.length===0){
+            alert('Please take at least 1 photo for your installation.')
+            return
+        }
+        if(user.userType === dictionary.userType[1].typeId && installationOrder.checkListSignature.signed===false){
+            alert('Please fill and submit the KITCHEN_INSTALL_CHECKLIST first!')
+            return
+        }
         Alert.alert('', 'Are you sure you want to submit this work?', [
             {
               text: 'Cancel',
@@ -135,14 +154,6 @@ const InstallationOrderDetail = ({ navigation, route }) => {
               style: 'cancel',
             },
             {text: 'YES', onPress: () => {
-                if(photos.length===0){
-                    alert('Please take at least 1 photo for your installation.')
-                    return
-                }
-                if(user.userType === dictionary.userType[1].typeId && installationOrder.checkListSignature.signed===false){
-                    alert('Please fill and submit the KITCHEN_INSTALL_CHECKLIST first!')
-                    return
-                }
                 const newTimeFrame = {workStatus:installationOrder.workStatus+1, time:new Date()}
                 const timeFrames = [...installationOrder.timeFrames,newTimeFrame]
                 let update

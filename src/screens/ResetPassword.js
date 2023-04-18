@@ -10,7 +10,7 @@ import Spinner from '../components/Spinner'
 
 const ResetPassword = ({ navigation }) => {
     const [ email, setEmail ] = useState('')
-    const { isLoading, error, message } = useSelector((state)=>state.auth)
+    const { isLoading2, error, message } = useSelector((state)=>state.auth)
     const dispatch = useDispatch()
 
     const validateEmail = (email) => {
@@ -40,7 +40,7 @@ const ResetPassword = ({ navigation }) => {
         })
     },[])
 
-    if(isLoading){
+    if(isLoading2){
         return <Spinner />
     }
 

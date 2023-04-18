@@ -1,6 +1,9 @@
 import { API_URL } from "@env"
 import axios from "axios"
 
+axios.defaults.timeout = 30000
+axios.defaults.timeoutErrorMessage='Requset time out, please check your internet connection and try again later!'
+
 const API_URL_LOGIN = API_URL+'/login'
 const API_URL_RESET = API_URL+'/sendresetemail'
 
