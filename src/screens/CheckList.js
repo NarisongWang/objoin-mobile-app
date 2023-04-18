@@ -74,7 +74,7 @@ const CheckList = ({ navigation, route }) => {
                 const update = {checkList:checkList,checkListSignature:{signed:true, signature:'', time:new Date()}}
                 dispatch(updateInstallationOrder({installationOrderId:installationOrder._id, update:update}))
                 .unwrap().then(()=>{
-                    alert('Success!')
+                    alert('Install checklist has been completed!')
                     navigation.goBack()
                 }).catch()
             }}

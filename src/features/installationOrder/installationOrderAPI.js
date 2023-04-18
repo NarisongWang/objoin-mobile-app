@@ -8,7 +8,7 @@ const API_URL_LIST = API_URL +'/installationorders/'
 const API_URL_UPLOAD = API_URL +'/uploadPhotos'
 const API_URL_DOWNLOAD = API_URL +'/download'
 
-axios.defaults.timeout = 10000
+axios.defaults.timeout = 30000
 axios.defaults.timeoutErrorMessage='Requset time out, please check your internet connection and try again later!'
 
 const getInstallationOrders = async() =>{
@@ -65,6 +65,7 @@ const submitOrder = async(orderInfo) =>{
         } catch (error) {
             throw new Error('Photo upload failed: ' + error)
         }
+        await FileSystem.deleteAsync(resizedPhoto.uri)
     }
     //step2: update installation order
     try {

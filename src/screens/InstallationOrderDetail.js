@@ -161,12 +161,14 @@ const InstallationOrderDetail = ({ navigation, route }) => {
                     update = {
                         workStatus: installationOrder.workStatus+1,
                         timeFrames: timeFrames,
+                        photos0:photos,
                         deliveryComment: noteInput
                     }
                 } else if(user.userType === dictionary.userType[1].typeId){ //installation
                     update = {
                         workStatus:installationOrder.workStatus+1,
-                        timeFrames:timeFrames
+                        timeFrames:timeFrames,
+                        photos1:photos,
                     }
                 }  
                 const orderInfo = {
